@@ -1,7 +1,7 @@
 import { useRef, useState, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { EVENTS, ACCENT_HEX, type EventDetail } from "@/lib/eventsData";
+import { EVENTS as STATIC_EVENTS, ACCENT_HEX, type EventDetail } from "@/lib/eventsData";
 
 function EventCard({ event, index }: { event: EventDetail; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -69,7 +69,7 @@ function EventCard({ event, index }: { event: EventDetail; index: number }) {
   );
 }
 
-export function EventsGrid() {
+export function EventsGrid({ events = STATIC_EVENTS }: { events?: EventDetail[] }) {
   return (
     <section id="events" className="relative mx-auto max-w-6xl px-6 py-28">
       <div className="mb-14 text-center">
@@ -84,11 +84,17 @@ export function EventsGrid() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {EVENTS.map((event, i) => (
-          <EventCard key={event.slug} event={event} index={i} />
-        ))}
-      </div>
+      {events.length === 0 ? (
+        <p className="text-center font-body text-sm text-mist/40">
+          No events match your search. Try a different keyword or category.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {events.map((event, i) => (
+            <EventCard key={event.slug} event={event} index={i} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

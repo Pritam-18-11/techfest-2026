@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GALLERY_TILES, type GalleryTile } from "@/lib/galleryData";
+import { useFetchWithFallback } from "@/hooks/useFetchWithFallback";
 
 export function Gallery() {
   const [selected, setSelected] = useState<GalleryTile | null>(null);
+  const { data: tiles, isLoading } = useFetchWithFallback<GalleryTile>(
+    "/gallery",
+    GALLERY_TILES
+  );
 
   return (
     <section id="gallery" className="relative mx-auto max-w-6xl px-6 py-28">
@@ -16,29 +21,40 @@ export function Gallery() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {GALLERY_TILES.map((tile, i) => (
-          <motion.button
-            key={tile.id}
-            data-cursor="hover"
-            onClick={() => setSelected(tile)}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5, delay: (i % 4) * 0.06 }}
-            whileHover={{ scale: 1.03, y: -4 }}
-            className={`group relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br ${tile.gradient} ${
-              i % 5 === 0 ? "row-span-2 aspect-auto" : ""
-            }`}
-          >
-            <div className="absolute inset-0 bg-void-base/30 transition-opacity group-hover:bg-void-base/10" />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-void-base/90 to-transparent p-3 text-left">
-              <p className="font-mono text-[10px] text-mist/70">{tile.year}</p>
-              <p className="font-body text-xs font-medium text-mist">{tile.caption}</p>
-            </div>
-          </motion.button>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="aspect-square animate-pulse rounded-xl bg-white/5"
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {tiles.map((tile, i) => (
+            <motion.button
+              key={(tile as { _id?: string }).id ?? (tile as { _id?: string })._id ?? `${tile.caption}-${i}`}
+              data-cursor="hover"
+              onClick={() => setSelected(tile)}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: (i % 4) * 0.06 }}
+              whileHover={{ scale: 1.03, y: -4 }}
+              className={`group relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br ${tile.gradient} ${
+                i % 5 === 0 ? "row-span-2 aspect-auto" : ""
+              }`}
+            >
+              <div className="absolute inset-0 bg-void-base/30 transition-opacity group-hover:bg-void-base/10" />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-void-base/90 to-transparent p-3 text-left">
+                <p className="font-mono text-[10px] text-mist/70">{tile.year}</p>
+                <p className="font-body text-xs font-medium text-mist">{tile.caption}</p>
+              </div>
+            </motion.button>
+          ))}
+        </div>
+      )}
 
       <AnimatePresence>
         {selected && (

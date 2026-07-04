@@ -108,6 +108,25 @@ body {
     );
     z-index: 5;
   }
+
+  .input {
+    width: 100%;
+    border-radius: 0.75rem;
+    background: rgba(10, 14, 32, 0.5);
+    border: 1px solid rgba(234, 240, 255, 0.12);
+    padding: 0.7rem 1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    color: var(--color-mist);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .input::placeholder {
+    color: rgba(234, 240, 255, 0.3);
+  }
+  .input:focus {
+    border-color: var(--color-signal-cyan);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

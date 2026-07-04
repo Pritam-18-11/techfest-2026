@@ -8,7 +8,8 @@ import { SpeakersPage } from "@/pages/SpeakersPage";
 import { SponsorsPage } from "@/pages/SponsorsPage";
 import { GalleryPage } from "@/pages/GalleryPage";
 import { FAQsPage } from "@/pages/FAQsPage";
-import { ComingSoon } from "@/pages/ComingSoon";
+import { RegisterPage } from "@/pages/RegisterPage";
+import { ContactPage } from "@/pages/ContactPage";
 import { NotFound } from "@/pages/NotFound";
 
 export function AppRoutes() {
@@ -23,26 +24,8 @@ export function AppRoutes() {
       <Route path="/sponsors" element={<SponsorsPage />} />
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/faqs" element={<FAQsPage />} />
-      <Route
-        path="/register"
-        element={
-          <ComingSoon
-            title="Register"
-            phase="Phase 3"
-            description="Full registration flow, connected to MongoDB, arrives with the backend build."
-          />
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <ComingSoon
-            title="Contact"
-            phase="Phase 3"
-            description="Reach the organizing committee — form connects to the backend in Phase 3."
-          />
-        }
-      />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

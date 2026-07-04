@@ -7,7 +7,7 @@ export function GalleryPage() {
       <PageHero
         eyebrow="Moments From Past Editions"
         title="Gallery"
-        description="Designed placeholder tiles for now — swap in real event photography once available."
+        description="Designed tiles, loaded live from our database — swap in real event photography once available."
       />
       <GallerySection />
     </main>

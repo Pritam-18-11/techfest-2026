@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { NAV_ITEMS, SITE } from "@/lib/siteConfig";
+import { api, ApiRequestError } from "@/lib/api";
 
 const SOCIALS = [
   { label: "Instagram", href: "https://instagram.com" },
@@ -11,14 +12,25 @@ const SOCIALS = [
 
 export function Footer() {
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [feedback, setFeedback] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.includes("@")) return;
-    setSubmitted(true);
-    setEmail("");
-    window.setTimeout(() => setSubmitted(false), 3200);
+
+    setStatus("loading");
+    try {
+      const res = await api.post<{ email: string }>("/newsletter", { email });
+      setStatus("success");
+      setFeedback(res.message ?? "Subscribed.");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+      setFeedback(err instanceof ApiRequestError ? err.message : "Couldn't subscribe. Try again.");
+    } finally {
+      window.setTimeout(() => setStatus("idle"), 3200);
+    }
   }
 
   return (
@@ -101,7 +113,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               {SOCIALS.map((social) => (
                 <li key={social.label}>
-                  <a
+                  
                     href={social.href}
                     target="_blank"
                     rel="noreferrer"
@@ -130,13 +142,18 @@ export function Footer() {
               <button
                 type="submit"
                 data-cursor="hover"
-                className="shrink-0 rounded-full bg-signal-gradient px-4 py-2 font-mono text-[11px] uppercase tracking-widest2 text-void-base"
+                disabled={status === "loading"}
+                className="shrink-0 rounded-full bg-signal-gradient px-4 py-2 font-mono text-[11px] uppercase tracking-widest2 text-void-base disabled:opacity-50"
               >
-                Join
+                {status === "loading" ? "…" : "Join"}
               </button>
             </form>
-            <p className="mt-2 h-4 font-mono text-[10px] text-signal-cyan">
-              {submitted ? "Transmission received." : ""}
+            <p
+              className={`mt-2 h-4 font-mono text-[10px] ${
+                status === "error" ? "text-signal-magenta" : "text-signal-cyan"
+              }`}
+            >
+              {status !== "idle" && status !== "loading" ? feedback : ""}
             </p>
           </div>
         </div>

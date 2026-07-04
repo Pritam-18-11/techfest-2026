@@ -1,5 +1,5 @@
 export type GalleryTile = {
-  id: string;
+  id?: string;
   caption: string;
   year: string;
   gradient: string;

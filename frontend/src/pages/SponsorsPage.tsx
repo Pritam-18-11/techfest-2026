@@ -7,7 +7,7 @@ export function SponsorsPage() {
       <PageHero
         eyebrow="Our Partners"
         title="Sponsors"
-        description="The organizations powering TechFest 2026. Static for now — live sponsor data lands with the backend in Phase 3."
+        description="The organizations powering TechFest 2026, loaded live from our database."
       />
       <SponsorsSection />
     </main>

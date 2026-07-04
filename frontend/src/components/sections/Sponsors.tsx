@@ -1,8 +1,7 @@
-import { SPONSORS } from "@/lib/sponsorsData";
+import { SPONSORS as STATIC_SPONSORS, type Sponsor } from "@/lib/sponsorsData";
+import { useFetchWithFallback } from "@/hooks/useFetchWithFallback";
 
 const TIER_ORDER: Array<Sponsor["tier"]> = ["Title", "Platinum", "Gold", "Silver"];
-
-type Sponsor = { name: string; tier: "Title" | "Platinum" | "Gold" | "Silver" };
 
 function SponsorMark({ name, size = "text-base" }: { name: string; size?: string }) {
   return (
@@ -16,12 +15,17 @@ function SponsorMark({ name, size = "text-base" }: { name: string; size?: string
 }
 
 export function Sponsors() {
+  const { data: sponsors, isLoading } = useFetchWithFallback<Sponsor>(
+    "/sponsors",
+    STATIC_SPONSORS
+  );
+
   const byTier = TIER_ORDER.map((tier) => ({
     tier,
-    items: SPONSORS.filter((s) => s.tier === tier),
+    items: sponsors.filter((s) => s.tier === tier),
   })).filter((g) => g.items.length > 0);
 
-  const marqueeItems = [...SPONSORS, ...SPONSORS];
+  const marqueeItems = [...sponsors, ...sponsors];
 
   return (
     <section id="sponsors" className="relative py-28">
@@ -34,24 +38,32 @@ export function Sponsors() {
         </h2>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl space-y-10 px-6">
-        {byTier.map((group) => (
-          <div key={group.tier}>
-            <p className="mb-4 text-center font-mono text-[11px] uppercase tracking-widest2 text-mist/40">
-              {group.tier} Sponsors
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {group.items.map((s) => (
-                <SponsorMark
-                  key={s.name}
-                  name={s.name}
-                  size={group.tier === "Title" ? "text-2xl" : "text-base"}
-                />
-              ))}
+      {isLoading ? (
+        <div className="mx-auto mt-14 flex max-w-6xl flex-wrap justify-center gap-4 px-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-16 w-40 animate-pulse rounded-xl bg-white/5" />
+          ))}
+        </div>
+      ) : (
+        <div className="mx-auto mt-14 max-w-6xl space-y-10 px-6">
+          {byTier.map((group) => (
+            <div key={group.tier}>
+              <p className="mb-4 text-center font-mono text-[11px] uppercase tracking-widest2 text-mist/40">
+                {group.tier} Sponsors
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                {group.items.map((s) => (
+                  <SponsorMark
+                    key={s.name}
+                    name={s.name}
+                    size={group.tier === "Title" ? "text-2xl" : "text-base"}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="relative mt-16 overflow-hidden">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-void-base to-transparent" />

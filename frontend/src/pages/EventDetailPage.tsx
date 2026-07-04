@@ -50,7 +50,7 @@ export function EventDetailPage() {
                 {event.tagline}
               </p>
               <Link
-                to="/register"
+                to={`/register?event=${event.slug}`}
                 data-cursor="hover"
                 className="mt-8 inline-block rounded-full px-8 py-3.5 font-mono text-xs uppercase tracking-widest2 text-void-base transition-transform hover:scale-105"
                 style={{ background: `linear-gradient(120deg, ${accent}, #EAF0FF)` }}
