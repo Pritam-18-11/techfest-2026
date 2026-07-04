@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-void: #000000;
+  --color-void-deep: #02040f;
+  --color-void-base: #050816;
+  --color-signal-blue: #2e6fff;
+  --color-signal-cyan: #3ef2e0;
+  --color-signal-purple: #7b4dff;
+  --color-signal-magenta: #ff3ecf;
+  --color-mist: #eaf0ff;
+  --cursor-x: 50vw;
+  --cursor-y: 50vh;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-signal-cyan) transparent;
+}
+
+html {
+  background: var(--color-void-base);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(
+      1200px 800px at 50% -10%,
+      rgba(46, 111, 255, 0.12),
+      transparent 60%
+    ),
+    var(--color-void-base);
+  font-family: "Inter", sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    var(--color-signal-cyan),
+    var(--color-signal-purple)
+  );
+  border-radius: 999px;
+}
+
+/* Hide native cursor once custom cursor is active (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(
+      120deg,
+      var(--color-signal-blue) 0%,
+      var(--color-signal-purple) 45%,
+      var(--color-signal-magenta) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glass {
+    background: rgba(10, 14, 32, 0.45);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(234, 240, 255, 0.08);
+  }
+
+  .glass-strong {
+    background: rgba(8, 11, 26, 0.7);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(234, 240, 255, 0.12);
+  }
+
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 999;
+  }
+
+  .vignette::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+    z-index: 5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
