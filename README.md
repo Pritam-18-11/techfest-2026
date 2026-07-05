@@ -1,108 +1,174 @@
 # TechFest 2026 — "The Future Begins Here"
 
-An immersive, cinematic 3D website for IIT TechFest 2026, built as a
-scroll-driven interactive movie: React Three Fiber scenes, GSAP-timed
-transitions, and a production Express/MongoDB backend.
+An immersive, cinematic 3D website for IIT TechFest 2026: a scroll-driven
+interactive movie built with React Three Fiber, GSAP-timed transitions,
+and a production Express/MongoDB backend.
 
-This repository is being built in four phases (see the original brief).
-**Phase 1 — Project Foundation & Core Experience — is complete.**
-
----
-
-## What's in Phase 1
-
-- Full frontend + backend project architecture
-- Vite + React 18 + TypeScript + Tailwind, configured end-to-end
-- Design system: color tokens, type scale (Orbitron / Inter / JetBrains
-  Mono), glass/glow utilities — see `frontend/tailwind.config.ts` and
-  `frontend/src/styles/globals.css`
-- Global chrome: glassmorphic `Navbar`, `Footer` with animated skyline,
-  cinematic `LoadingScreen`, magnetic `CustomCursor`
-- Routing (`react-router-dom`) with a real Home route and staged
-  "Coming Soon" shells for every other route (styled, not placeholder
-  Lorem Ipsum — these get replaced feature-by-feature in Phase 2 & 3)
-- Smooth scrolling via Lenis, driven by the GSAP ticker so future
-  ScrollTrigger timelines stay in sync
-- **Scene 1 — Deep Space**: layered parallax starfields, drifting
-  volumetric nebula clouds, a GPU shader-based particle system that
-  forms the TechFest wordmark out of chaos and can burst it apart,
-  bloom + vignette post-processing, and a mouse-driven camera rig
-- Express + MongoDB backend architecture: security middleware (helmet,
-  rate limiting, CORS), centralized error handling, a working
-  `/api/health` endpoint that proves the DB connection, and the
-  routes/controllers/models folder pattern that Phase 3 will fill in
-
-## Coming in later phases
-
-- **Phase 2**: remaining cinematic scenes (Earth, Future City, AI
-  World, Quantum Computing, Robotics Lab, Main Arena), all main
-  content sections (About, Events, Workshops, Speakers, Gallery,
-  Countdown), and all 8 event detail pages
-- **Phase 3**: full backend APIs (events, registration, gallery,
-  sponsors, contact, newsletter), MongoDB models, frontend↔backend
-  wiring, search/filtering, success/error states
-- **Phase 4**: performance passes, SEO, accessibility, final polish,
-  deployment guide
+**Status: all 4 build phases complete.** This is the final, deployable state.
 
 ---
 
-## Getting started
+## What's included, by phase
 
-### Frontend
+**Phase 1 — Foundation**
+Vite + React 18 + TypeScript + Tailwind, design system, global chrome
+(Navbar, Footer, LoadingScreen, CustomCursor), Lenis smooth scroll, and
+Scene 1 (Deep Space) with the particle-formed logo intro.
 
-```bash
-cd frontend
-cp .env.example .env
-npm install
-npm run dev
-```
+**Phase 2 — Cinematic story & content**
+Scenes 2–7 (Earth, Future City, AI World, Quantum Computing, Robotics
+Lab, Main Arena) wired into one scroll-pinned camera journey, every main
+content section (About, Events, Workshops, Speakers, Sponsors, Gallery,
+Timeline, Countdown), and all 8 event detail pages.
 
-Runs at `http://localhost:5173`.
+**Phase 3 — Backend & interactivity**
+Full REST API (Events, Registrations, Gallery, Sponsors, Contact,
+Newsletter) with Mongoose models, express-validator validation, an
+admin-key gate for CRUD, rate limiting, a seed script, and a frontend
+wired to it: live search/filter, a real registration form, a real
+contact form, and a working newsletter signup — all with loading,
+error, and success states, falling back to bundled static content if
+the API is unreachable.
 
-### Backend
+**Phase 4 — Polish, performance, accessibility, deployment**
+Route-level code splitting, a WebGL/`prefers-reduced-motion`-aware
+static fallback so the site degrades gracefully, an error boundary
+around the 3D canvases, full SEO (meta tags, Open Graph, JSON-LD,
+sitemap, robots.txt), accessibility passes (skip link, focus-visible
+styles, scroll-reset on navigation), Docker images for both apps, a
+Compose file to run the whole stack, and CI.
 
-```bash
-cd backend
-cp .env.example .env   # point MONGO_URI at your MongoDB instance
-npm install
-npm run dev
-```
-
-Runs at `http://localhost:5000`. Verify with:
-
-```bash
-curl http://localhost:5000/api/health
-```
+---
 
 ## Project structure
 
-```
+\`\`\`
 techfest-2026/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── layout/       # Navbar, Footer
-│   │   │   ├── three/        # SpaceScene, Starfield, Nebula, ParticleLogo, CameraRig
-│   │   │   └── ui/           # LoadingScreen, CustomCursor
-│   │   ├── context/          # LoadingContext (boot sequence state)
-│   │   ├── hooks/            # useLenis, useMousePosition
-│   │   ├── lib/               # utils, siteConfig (nav + event data)
-│   │   ├── pages/             # Home, HeroOverlay, ComingSoon, NotFound
-│   │   ├── routes/            # AppRoutes
+│   │   │   ├── three/        # All R3F scenes, camera rigs, error boundary
+│   │   │   ├── sections/     # About, Events, Workshops, Speakers, ...
+│   │   │   ├── ui/           # LoadingScreen, CustomCursor, forms, PageHero
+│   │   │   └── utility/      # ScrollToTop
+│   │   ├── context/          # LoadingContext
+│   │   ├── hooks/            # useLenis, useEvents, useFormSubmit, useWebGLSupport, ...
+│   │   ├── lib/               # api.ts, siteConfig, eventsData, and other content
+│   │   ├── pages/             # One component per route
+│   │   ├── routes/            # AppRoutes (code-split)
+│   │   ├── three/             # journeyState.ts, journeyScenes.ts
 │   │   └── styles/            # globals.css (design tokens)
+│   ├── public/                 # favicon, manifest, robots.txt, sitemap.xml
+│   ├── Dockerfile / nginx.conf
 │   └── ...config files
-└── backend/
-    ├── config/                # db.js
-    ├── controllers/           # health.controller.js (+ Phase 3 controllers)
-    ├── middleware/             # errorHandler.js
-    ├── models/                 # Phase 3 Mongoose schemas
-    ├── routes/                 # index.js, health.routes.js (+ Phase 3 routers)
-    ├── app.js
-    └── server.js
-```
+├── backend/
+│   ├── config/                 # db.js
+│   ├── controllers/            # one per resource
+│   ├── middleware/             # errorHandler, requireAdmin, handleValidation, writeLimiter
+│   ├── models/                 # Mongoose schemas
+│   ├── routes/                 # one router per resource + index.js
+│   ├── seed.js                 # populates Events/Sponsors/Gallery with real content
+│   ├── Dockerfile
+│   ├── app.js
+│   └── server.js
+├── docker-compose.yml           # mongo + backend + frontend, one command
+└── .github/workflows/ci.yml
+\`\`\`
 
 ## Tech stack
 
 React · TypeScript · Vite · React Three Fiber · Three.js · Drei ·
 `@react-three/postprocessing` · GSAP · Framer Motion · Lenis ·
-TailwindCSS · React Router · Node.js · Express · MongoDB · Mongoose
+TailwindCSS · React Router · Node.js · Express · MongoDB · Mongoose ·
+express-validator
+
+---
+
+## Local installation
+
+### 1. Backend
+
+\`\`\`bash
+cd backend
+cp .env.example .env      # set MONGO_URI, ADMIN_API_KEY
+npm install
+npm run seed               # populates Events, Sponsors, Gallery
+npm run dev                # http://localhost:5000
+\`\`\`
+
+Verify it's healthy:
+
+\`\`\`bash
+curl http://localhost:5000/api/health
+\`\`\`
+
+### 2. Frontend
+
+\`\`\`bash
+cd frontend
+cp .env.example .env       # VITE_API_BASE_URL=http://localhost:5000/api
+npm install
+npm run dev                 # http://localhost:5173
+\`\`\`
+
+### 3. (Optional) Admin API calls
+
+Write endpoints for Events/Sponsors/Gallery require the admin key set
+in `backend/.env`:
+
+\`\`\`bash
+curl -X POST http://localhost:5000/api/sponsors \\
+  -H "Content-Type: application/json" \\
+  -H "x-admin-key: <your ADMIN_API_KEY>" \\
+  -d '{"name":"New Sponsor","tier":"Gold"}'
+\`\`\`
+
+---
+
+## Deployment
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for full step-by-step guides
+covering Docker Compose, Vercel/Netlify + Render/Railway, and MongoDB
+Atlas.
+
+Quickest path — Docker Compose (runs Mongo + API + frontend together):
+
+\`\`\`bash
+docker compose up --build
+\`\`\`
+
+Frontend at `http://localhost:8080`, API at `http://localhost:5000/api`.
+
+---
+
+## Environment variables
+
+**backend/.env**
+| Variable | Description |
+|---|---|
+| `PORT` | API port (default 5000) |
+| `NODE_ENV` | `development` or `production` |
+| `MONGO_URI` | MongoDB connection string |
+| `CORS_ORIGIN` | Comma-separated allowed origins for the frontend |
+| `ADMIN_API_KEY` | Required header value for admin CRUD endpoints |
+
+**frontend/.env**
+| Variable | Description |
+|---|---|
+| `VITE_API_BASE_URL` | Base URL of the backend API, e.g. `https://api.techfest2026.in/api` |
+
+---
+
+## Scripts reference
+
+**frontend**
+- `npm run dev` — local dev server
+- `npm run build` — type-check + production build to `dist/`
+- `npm run preview` — preview the production build locally
+- `npm run lint` — ESLint
+
+**backend**
+- `npm run dev` — nodemon dev server
+- `npm start` — production start
+- `npm run seed` — reset and re-populate Events/Sponsors/Gallery

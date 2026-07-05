@@ -3,11 +3,18 @@ import { motion } from "framer-motion";
 import { getEventBySlug, getRelatedEvents, ACCENT_HEX } from "@/lib/eventsData";
 import { EventIllustration } from "@/components/three/EventIllustration";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 import { NotFound } from "./NotFound";
 
 export function EventDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const event = slug ? getEventBySlug(slug) : undefined;
+
+  useDocumentHead({
+    title: event ? event.title : "Event Not Found",
+    description: event?.tagline,
+    path: event ? `/events/${event.slug}` : undefined,
+  });
 
   if (!event) return <NotFound />;
 

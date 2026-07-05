@@ -9,6 +9,13 @@ import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
+// Deployed behind a reverse proxy (Render/Railway/Nginx) in production,
+// so Express needs to trust the X-Forwarded-For header for req.ip and
+// express-rate-limit to work correctly.
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 app.use(helmet());
 app.use(
   cors({

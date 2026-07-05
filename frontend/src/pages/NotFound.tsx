@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 export function NotFound() {
+  useDocumentHead({ title: "Page Not Found" });
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-void-base px-6 text-center">
       <p className="font-mono text-8xl font-black text-gradient">404</p>

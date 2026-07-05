@@ -4,8 +4,15 @@ import { HackathonSpotlight } from "@/components/sections/HackathonSpotlight";
 import { EventsGrid } from "@/components/sections/EventsGrid";
 import { EVENTS as STATIC_EVENTS } from "@/lib/eventsData";
 import { useEvents } from "@/hooks/useEvents";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 export function EventsPage() {
+  useDocumentHead({
+    title: "Events",
+    description: "8 flagship competitions at TechFest 2026 — AI, robotics, cybersecurity, and entrepreneurship.",
+    path: "/events",
+  });
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 

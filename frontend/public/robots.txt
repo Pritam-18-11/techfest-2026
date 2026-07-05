@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://techfest2026.in/sitemap.xml

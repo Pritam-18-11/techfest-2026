@@ -3,19 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050816" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="TechFest Organizing Committee, IIT" />
     <meta
       name="description"
-      content="TechFest 2026 — The Future Begins Here. India's most immersive technology festival: hackathons, robotics, AI, quantum computing and more."
+      content="TechFest 2026 — The Future Begins Here. India's most immersive technology festival: hackathons, robotics, AI, quantum computing and more. 13-15 February 2026."
     />
+    <link rel="canonical" href="https://techfest2026.in/" />
     <title>TechFest 2026 | The Future Begins Here</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TechFest 2026" />
+    <meta property="og:title" content="TechFest 2026 | The Future Begins Here" />
+    <meta
+      property="og:description"
+      content="Three days of hackathons, robotics, AI, and quantum computing. 13-15 February 2026 at IIT."
+    />
+    <meta property="og:url" content="https://techfest2026.in/" />
+    <meta property="og:image" content="https://techfest2026.in/og-cover.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TechFest 2026 | The Future Begins Here" />
+    <meta
+      name="twitter:description"
+      content="Three days of hackathons, robotics, AI, and quantum computing. 13-15 February 2026 at IIT."
+    />
+    <meta name="twitter:image" content="https://techfest2026.in/og-cover.jpg" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Inter:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Structured data: helps search engines surface event dates/venue directly -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "TechFest 2026",
+        "description": "TechFest 2026 — three days of hackathons, robotics, AI, and quantum computing.",
+        "startDate": "2026-02-13T09:00:00+05:30",
+        "endDate": "2026-02-15T22:00:00+05:30",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "Place",
+          "name": "Indian Institute of Technology",
+          "address": "India"
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "TechFest Organizing Committee",
+          "url": "https://techfest2026.in"
+        }
+      }
+    </script>
   </head>
   <body class="bg-void-base text-mist antialiased overflow-x-hidden">
     <div id="root"></div>

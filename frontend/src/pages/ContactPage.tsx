@@ -3,6 +3,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { SuccessCheck, ErrorBanner } from "@/components/ui/FormFeedback";
 import { api } from "@/lib/api";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 type ContactPayload = {
   name: string;
@@ -16,6 +17,12 @@ function submitContact(payload: ContactPayload) {
 }
 
 export function ContactPage() {
+  useDocumentHead({
+    title: "Contact",
+    description: "Get in touch with the TechFest 2026 organizing committee.",
+    path: "/contact",
+  });
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");

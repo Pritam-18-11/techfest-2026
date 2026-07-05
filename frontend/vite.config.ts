@@ -14,6 +14,11 @@ export default defineConfig({
     port: 5173,
     open: true,
   },
+  esbuild: {
+    // Strip debug noise from the production bundle; errors/warnings
+    // still surface via the ErrorBoundary and error responses.
+    drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
+  },
   build: {
     target: "esnext",
     sourcemap: false,
@@ -21,7 +26,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "three-vendor": ["three", "@react-three/fiber", "@react-three/drei"],
+          "three-vendor": [
+            "three",
+            "@react-three/fiber",
+            "@react-three/drei",
+            "@react-three/postprocessing",
+          ],
           "motion-vendor": ["gsap", "framer-motion", "lenis"],
         },
       },

@@ -1,8 +1,15 @@
 import { PageHero } from "@/components/ui/PageHero";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
 import { GENERAL_FAQS } from "@/lib/faqData";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 export function FAQsPage() {
+  useDocumentHead({
+    title: "FAQs",
+    description: "Frequently asked questions about attending and competing at TechFest 2026.",
+    path: "/faqs",
+  });
+
   return (
     <main className="min-h-screen bg-void-base">
       <PageHero

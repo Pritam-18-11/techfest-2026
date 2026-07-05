@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { NAV_ITEMS, SITE } from "@/lib/siteConfig";
 import { api, ApiRequestError } from "@/lib/api";
@@ -12,16 +12,16 @@ const SOCIALS = [
 
 export function Footer() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!email.includes("@")) return;
 
     setStatus("loading");
     try {
-      const res = await api.post<{ email: string }>("/newsletter", { email });
+      const res = await api.post("/newsletter", { email });
       setStatus("success");
       setFeedback(res.message ?? "Subscribed.");
       setEmail("");
@@ -35,7 +35,6 @@ export function Footer() {
 
   return (
     <footer className="relative mt-32 overflow-hidden border-t border-white/5 bg-void-deep pt-20">
-      {/* Skyline silhouette */}
       <svg
         viewBox="0 0 1440 180"
         className="pointer-events-none absolute inset-x-0 top-0 h-32 w-full -translate-y-1/2 opacity-40"

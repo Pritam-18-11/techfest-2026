@@ -1,7 +1,14 @@
 import { PageHero } from "@/components/ui/PageHero";
 import { Gallery as GallerySection } from "@/components/sections/Gallery";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 export function GalleryPage() {
+  useDocumentHead({
+    title: "Gallery",
+    description: "Moments from past editions of TechFest.",
+    path: "/gallery",
+  });
+
   return (
     <main className="min-h-screen bg-void-base">
       <PageHero

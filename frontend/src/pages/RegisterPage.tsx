@@ -6,6 +6,7 @@ import { SuccessCheck, ErrorBanner } from "@/components/ui/FormFeedback";
 import { EVENTS } from "@/lib/eventsData";
 import { api } from "@/lib/api";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useDocumentHead } from "@/hooks/useDocumentHead";
 
 type TeamMember = { name: string; email: string };
 
@@ -24,6 +25,12 @@ function submitRegistration(payload: RegistrationPayload) {
 }
 
 export function RegisterPage() {
+  useDocumentHead({
+    title: "Register",
+    description: "Register your team for a TechFest 2026 competition.",
+    path: "/register",
+  });
+
   const [params] = useSearchParams();
   const preselectedSlug = params.get("event") ?? "";
 
