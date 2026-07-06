@@ -7,11 +7,9 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { ScrollToTop } from "@/components/utility/ScrollToTop";
-import { useLenis } from "@/hooks/useLenis";
 
 function Shell() {
-  useLenis();
-  useLocation(); // kept in the tree so future route-based transitions can key off it
+  useLocation();
 
   return (
     <>

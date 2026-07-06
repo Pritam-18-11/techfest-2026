@@ -1,4 +1,4 @@
-import { useFrame, useThree } from "@react-three/fiber";
+﻿import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 import { useMousePosition } from "@/hooks/useMousePosition";
@@ -29,7 +29,7 @@ export function JourneyCameraRig() {
     camera.position.y = mouseOffset.current.y * 0.8;
     camera.position.z = z;
     camera.lookAt(mouseOffset.current.x * 2, mouseOffset.current.y, z - 12);
-    camera.fov = 55;
+    if ("fov" in camera) (camera as THREE.PerspectiveCamera).fov = 55;
     camera.updateProjectionMatrix();
   });
 

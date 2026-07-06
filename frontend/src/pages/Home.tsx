@@ -9,6 +9,7 @@ import { useLoading } from "@/context/LoadingContext";
 import { useWebGLSupport } from "@/hooks/useWebGLSupport";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useDocumentHead } from "@/hooks/useDocumentHead";
+import { useInView } from "@/hooks/useInView";
 import { About } from "@/components/sections/About";
 import { HackathonSpotlight } from "@/components/sections/HackathonSpotlight";
 import { EventsGrid } from "@/components/sections/EventsGrid";
@@ -47,13 +48,12 @@ export function Home() {
   const [stage, setStage] = useState<IntroStage>("forming");
   const supportsWebGL = useWebGLSupport();
   const prefersReducedMotion = usePrefersReducedMotion();
+  const { ref: heroRef, inView: heroInView } = useInView<HTMLDivElement>({
+    rootMargin: "100px 0px 100px 0px",
+  });
 
-  // Skip the cinematic 3D experience entirely for unsupported browsers
-  // or when the user has asked their OS to reduce motion.
   const useLightExperience = supportsWebGL === false || prefersReducedMotion;
 
-  // Lock scroll until the intro sequence hands off to the hero
-  // (only relevant for the full cinematic experience).
   useEffect(() => {
     if (useLightExperience) {
       document.body.style.overflow = "";
@@ -67,8 +67,8 @@ export function Home() {
 
   function handleLogoFormed() {
     setStage("formed");
-    window.setTimeout(() => setStage("bursting"), 900);
-    window.setTimeout(() => setStage("revealed"), 2500);
+    window.setTimeout(() => setStage("bursting"), 500);
+    window.setTimeout(() => setStage("revealed"), 1300);
   }
 
   if (useLightExperience) {
@@ -83,12 +83,13 @@ export function Home() {
   return (
     <div className="relative w-full">
       <CanvasErrorBoundary fallback={<StaticHeroFallback />}>
-        <div className="relative h-screen w-full overflow-hidden">
+        <div ref={heroRef} className="relative h-screen w-full overflow-hidden">
           <SpaceScene
             showLogo={isReady}
             logoBurst={stage === "bursting" || stage === "revealed"}
             onLogoFormed={handleLogoFormed}
             interactive
+            frameloop={heroInView ? "always" : "never"}
           />
 
           <div className="vignette" />
@@ -99,7 +100,7 @@ export function Home() {
                 key="hero"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 1.4, ease: "easeOut" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 className="absolute inset-0"
               >
                 <HeroOverlay />
@@ -108,13 +109,9 @@ export function Home() {
           </AnimatePresence>
         </div>
 
-        {/* Scenes 2-7: the pinned scroll journey through Earth, Future City,
-            AI World, Quantum Computing, Robotics Lab and the Main Arena. */}
         <JourneyScroll />
       </CanvasErrorBoundary>
 
-      {/* Main content sections, revealed with standard scroll (no pin)
-          once the cinematic journey hands off. */}
       {CONTENT_SECTIONS}
     </div>
   );

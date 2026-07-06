@@ -4,8 +4,8 @@ import * as THREE from "three";
 import gsap from "gsap";
 
 const VERTEX_SHADER = /* glsl */ `
-  uniform float uProgress;   // 0 = scattered chaos, 1 = formed logo
-  uniform float uBurst;      // 0 = intact, 1 = fully exploded outward
+  uniform float uProgress;
+  uniform float uBurst;
   uniform float uTime;
   uniform float uPixelRatio;
 
@@ -20,11 +20,9 @@ const VERTEX_SHADER = /* glsl */ `
 
     vec3 formed = mix(aScatter, aTarget, uProgress);
 
-    // gentle idle float once formed
     float wobble = sin(uTime * 0.6 + aRandom * 6.2831) * 0.03 * uProgress;
     formed.y += wobble;
 
-    // burst: fling particles outward along their own direction from center
     vec3 burstDir = normalize(aTarget + 0.0001) * (6.0 + aRandom * 10.0);
     vec3 finalPos = mix(formed, aTarget + burstDir, uBurst);
 
@@ -51,7 +49,6 @@ const FRAGMENT_SHADER = /* glsl */ `
   }
 `;
 
-/** Samples visible pixels of text rendered to an offscreen canvas. */
 function sampleTextPositions(text: string, count: number) {
   const canvas = document.createElement("canvas");
   const width = 1024;
@@ -92,15 +89,13 @@ function sampleTextPositions(text: string, count: number) {
 type ParticleLogoProps = {
   text?: string;
   count?: number;
-  /** Fires once the forming animation completes. */
   onFormed?: () => void;
-  /** External trigger (0-1 driven by parent) to explode the logo apart. */
   burst?: boolean;
 };
 
 export function ParticleLogo({
   text = "TECHFEST 2026",
-  count = 9000,
+  count = 2500,
   onFormed,
   burst = false,
 }: ParticleLogoProps) {
@@ -128,7 +123,7 @@ export function ParticleLogo({
       uProgress: { value: 0 },
       uBurst: { value: 0 },
       uTime: { value: 0 },
-      uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      uPixelRatio: { value: Math.min(window.devicePixelRatio, 1.5) },
       uColorA: { value: new THREE.Color("#3EF2E0") },
       uColorB: { value: new THREE.Color("#7B4DFF") },
     }),
@@ -137,12 +132,12 @@ export function ParticleLogo({
 
   useEffect(() => {
     const tl = gsap.timeline({
-      delay: 0.4,
+      delay: 0.2,
       onComplete: () => onFormed?.(),
     });
     tl.to(uniforms.uProgress, {
       value: 1,
-      duration: 2.4,
+      duration: 1.4,
       ease: "power3.out",
     });
     return () => {
@@ -154,7 +149,7 @@ export function ParticleLogo({
   useEffect(() => {
     gsap.to(uniforms.uBurst, {
       value: burst ? 1 : 0,
-      duration: 1.6,
+      duration: 0.9,
       ease: "power2.in",
     });
   }, [burst, uniforms.uBurst]);

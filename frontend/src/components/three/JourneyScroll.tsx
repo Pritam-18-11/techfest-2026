@@ -4,19 +4,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { JourneyCanvas } from "@/components/three/JourneyCanvas";
 import { JOURNEY_SCENES, VH_PER_SCENE } from "@/three/journeyScenes";
 import { setJourneyProgress } from "@/three/journeyState";
+import { useInView } from "@/hooks/useInView";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Renders a tall spacer (VH_PER_SCENE * number of scenes) and pins the
- * JourneyCanvas for its duration. Scroll position within that pinned
- * range drives journeyState.progress via ScrollTrigger's onUpdate,
- * which the camera rig and scene FadeGates read every frame.
- */
 export function JourneyScroll() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { ref: wrapperRef, inView } = useInView<HTMLDivElement>({
+    rootMargin: "200px 0px 200px 0px",
+  });
 
   useEffect(() => {
     if (!wrapperRef.current || !pinRef.current) return;
@@ -27,7 +24,10 @@ export function JourneyScroll() {
       end: "bottom bottom",
       pin: pinRef.current,
       pinSpacing: false,
-      scrub: 0.6,
+      // Lower scrub = the canvas follows the scroll position much more
+      // directly instead of "catching up" slowly (this was the main
+      // cause of the sluggish scroll feeling in this section).
+      scrub: 0.15,
       onUpdate: (self) => {
         setJourneyProgress(self.progress);
         const idx = JOURNEY_SCENES.findIndex(
@@ -40,14 +40,14 @@ export function JourneyScroll() {
     return () => {
       trigger.kill();
     };
-  }, []);
+  }, [wrapperRef]);
 
   const totalVh = VH_PER_SCENE * JOURNEY_SCENES.length;
 
   return (
     <div ref={wrapperRef} style={{ height: `${totalVh}vh` }} className="relative">
       <div ref={pinRef} className="relative h-screen w-full overflow-hidden">
-        <JourneyCanvas />
+        <JourneyCanvas frameloop={inView ? "always" : "never"} />
 
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6 md:p-10">
           <div className="flex items-center justify-between">

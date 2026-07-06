@@ -2,9 +2,9 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const BUILDING_COUNT = 90;
-const TRAFFIC_COUNT = 40;
-const DRONE_COUNT = 14;
+const BUILDING_COUNT = 45;
+const TRAFFIC_COUNT = 18;
+const DRONE_COUNT = 8;
 
 function useBuildingLayout() {
   return useMemo(() => {
@@ -52,7 +52,6 @@ export function FutureCityScene() {
     []
   );
 
-  // Static instance transforms + colors, set once.
   useMemo(() => {
     if (!buildingRef.current || !edgeRef.current) return;
     buildings.forEach((b, i) => {
@@ -100,7 +99,6 @@ export function FutureCityScene() {
 
   return (
     <group position={[0, -4, -70]}>
-      {/* Road */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -6, -40]}>
         <planeGeometry args={[16, 130]} />
         <meshStandardMaterial color="#050816" roughness={0.4} />
@@ -136,7 +134,6 @@ export function FutureCityScene() {
         <meshBasicMaterial color="#7B4DFF" />
       </instancedMesh>
 
-      {/* Billboards */}
       {[-16, 18].map((x, i) => (
         <mesh key={i} position={[x, 12, -30 - i * 20]} rotation={[0, i === 0 ? 0.5 : -0.5, 0]}>
           <planeGeometry args={[7, 4]} />

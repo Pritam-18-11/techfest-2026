@@ -2,10 +2,10 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const PANEL_COLS = 14;
-const PANEL_ROWS = 6;
-const DRONE_COUNT = 20;
-const FIREWORK_PARTICLES = 500;
+const PANEL_COLS = 10;
+const PANEL_ROWS = 4;
+const DRONE_COUNT = 10;
+const FIREWORK_PARTICLES = 150;
 
 function LEDWall() {
   const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -154,7 +154,6 @@ export function ArenaScene() {
       <Drones />
       <FireworkBurst />
 
-      {/* Stage */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, -6]}>
         <planeGeometry args={[26, 14]} />
         <meshStandardMaterial color="#0B0F24" metalness={0.7} roughness={0.3} />

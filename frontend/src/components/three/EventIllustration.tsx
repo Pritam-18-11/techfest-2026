@@ -1,22 +1,18 @@
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 export function EventIllustration({ color = "#3EF2E0" }: { color?: string }) {
   return (
     <div className="aspect-square w-full overflow-hidden rounded-2xl">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: false }}
         camera={{ position: [0, 0, 6], fov: 45 }}
       >
         <color attach="background" args={["#02040f"]} />
         <Suspense fallback={null}>
           <IllustrationMesh color={color} />
-          <EffectComposer multisampling={0}>
-            <Bloom intensity={1.1} luminanceThreshold={0.1} mipmapBlur />
-          </EffectComposer>
         </Suspense>
       </Canvas>
     </div>

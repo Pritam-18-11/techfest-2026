@@ -1,9 +1,5 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-import * as THREE from "three";
-import { JourneyCameraRig } from "./JourneyCameraRig";
-import { WarpStreaks } from "./WarpStreaks";
 import { Starfield } from "./Starfield";
 import { EarthScene } from "./EarthScene";
 import { FutureCityScene } from "./FutureCityScene";
@@ -11,33 +7,33 @@ import { AIWorldScene } from "./AIWorldScene";
 import { QuantumScene } from "./QuantumScene";
 import { RoboticsScene } from "./RoboticsScene";
 import { ArenaScene } from "./ArenaScene";
+import { JourneyCameraRig } from "./JourneyCameraRig";
+import { WarpStreaks } from "./WarpStreaks";
 import { JOURNEY_SCENES } from "@/three/journeyScenes";
 import { journeyState } from "@/three/journeyState";
 
-/**
- * Wraps a scene group and fades it in/out (via a cloned-material
- * opacity trick would be expensive per-mesh, so instead we toggle
- * visibility based on distance from the current camera-path Z — cheap,
- * avoids ever rendering more than ~2 scenes' worth of draw calls).
- */
 function FadeGate({ band, children }: { band: [number, number]; children: React.ReactNode }) {
-  const groupRef = useRef<THREE.Group>(null);
-  const margin = 0.08;
+  const [active, setActive] = useState(false);
+  const margin = 0.1;
 
   useFrame(() => {
-    if (!groupRef.current) return;
     const p = journeyState.smoothProgress;
-    const active = p > band[0] - margin && p < band[1] + margin;
-    groupRef.current.visible = active;
+    const shouldBeActive = p > band[0] - margin && p < band[1] + margin;
+    if (shouldBeActive !== active) setActive(shouldBeActive);
   });
 
-  return <group ref={groupRef}>{children}</group>;
+  return active ? <>{children}</> : null;
 }
 
-export function JourneyCanvas() {
+type JourneyCanvasProps = {
+  frameloop?: "always" | "demand" | "never";
+};
+
+export function JourneyCanvas({ frameloop = "always" }: JourneyCanvasProps) {
   return (
     <Canvas
-      dpr={[1, 1.75]}
+      frameloop={frameloop}
+      dpr={[1, 1.25]}
       gl={{ antialias: false, powerPreference: "high-performance" }}
       camera={{ position: [0, 0, 8], fov: 55, near: 0.1, far: 260 }}
       className="!absolute inset-0"
@@ -46,7 +42,7 @@ export function JourneyCanvas() {
       <fog attach="fog" args={["#02040f", 20, 140]} />
 
       <Suspense fallback={null}>
-        <Starfield count={1500} radius={140} layer={1} />
+        <Starfield count={600} radius={140} layer={1} />
 
         <FadeGate band={JOURNEY_SCENES[0].band}>
           <EarthScene />
@@ -69,11 +65,6 @@ export function JourneyCanvas() {
 
         <WarpStreaks />
         <JourneyCameraRig />
-
-        <EffectComposer multisampling={0}>
-          <Bloom intensity={0.85} luminanceThreshold={0.18} luminanceSmoothing={0.4} mipmapBlur />
-          <Vignette eskil={false} offset={0.15} darkness={0.85} />
-        </EffectComposer>
       </Suspense>
     </Canvas>
   );

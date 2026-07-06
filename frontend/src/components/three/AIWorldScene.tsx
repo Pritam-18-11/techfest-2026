@@ -36,7 +36,7 @@ const BRAIN_FRAGMENT = /* glsl */ `
   }
 `;
 
-const NODE_COUNT = 60;
+const NODE_COUNT = 30;
 
 function useNeuralLines() {
   return useMemo(() => {
@@ -95,7 +95,7 @@ export function AIWorldScene() {
     <group position={[0, 0, -110]}>
       <group ref={groupRef}>
         <mesh ref={brainRef}>
-          <icosahedronGeometry args={[5, 5]} />
+          <icosahedronGeometry args={[5, 4]} />
           <shaderMaterial
             vertexShader={BRAIN_VERTEX}
             fragmentShader={BRAIN_FRAGMENT}

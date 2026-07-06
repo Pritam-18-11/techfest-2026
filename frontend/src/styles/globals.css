@@ -23,6 +23,7 @@
 html {
   background: var(--color-void-base);
   color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {

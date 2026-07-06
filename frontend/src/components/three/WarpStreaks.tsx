@@ -3,14 +3,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { journeyState } from "@/three/journeyState";
 
-const STREAK_COUNT = 260;
+const STREAK_COUNT = 120;
 
-/**
- * A field of thin line segments parented to the camera, radiating
- * outward. Their length and opacity scale with scroll velocity, so
- * fast scrolling between scenes reads as a hyperspace jump while slow
- * scrolling leaves them essentially invisible.
- */
 export function WarpStreaks() {
   const { camera } = useThree();
   const groupRef = useRef<THREE.Group>(null);
@@ -29,7 +23,6 @@ export function WarpStreaks() {
       positions[i * 6] = x;
       positions[i * 6 + 1] = y;
       positions[i * 6 + 2] = z;
-      // second point extended toward the camera, stretched later via scale
       positions[i * 6 + 3] = x;
       positions[i * 6 + 4] = y;
       positions[i * 6 + 5] = z + 1;

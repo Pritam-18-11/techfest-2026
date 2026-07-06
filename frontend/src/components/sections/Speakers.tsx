@@ -1,11 +1,20 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
 import { SPEAKERS } from "@/lib/speakersData";
 
+/** Degrees per second — tweak to speed up/slow down the carousel. */
+const ROTATION_SPEED = 6;
+
 export function Speakers() {
-  const [active, setActive] = useState(0);
   const count = SPEAKERS.length;
   const angleStep = 360 / count;
+  const rotateY = useMotionValue(0);
+  const [paused, setPaused] = useState(false);
+
+  useAnimationFrame((_, delta) => {
+    if (paused) return;
+    rotateY.set(rotateY.get() - (ROTATION_SPEED * delta) / 1000);
+  });
 
   return (
     <section id="speakers" className="relative mx-auto max-w-6xl px-6 py-28">
@@ -21,12 +30,12 @@ export function Speakers() {
       <div
         className="relative mx-auto h-[380px] max-w-xl"
         style={{ perspective: 1400 }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
       >
         <motion.div
           className="relative h-full w-full"
-          style={{ transformStyle: "preserve-3d" }}
-          animate={{ rotateY: -active * angleStep }}
-          transition={{ type: "spring", stiffness: 60, damping: 16 }}
+          style={{ transformStyle: "preserve-3d", rotateY }}
         >
           {SPEAKERS.map((speaker, i) => (
             <div
@@ -61,21 +70,9 @@ export function Speakers() {
         </motion.div>
       </div>
 
-      <div className="mt-10 flex justify-center gap-2">
-        {SPEAKERS.map((_, i) => (
-          <button
-            key={i}
-            data-cursor="hover"
-            onClick={() => setActive(i)}
-            aria-label={`Show speaker ${i + 1}`}
-            className="h-1.5 rounded-full transition-all duration-300"
-            style={{
-              width: i === active ? 24 : 8,
-              backgroundColor: i === active ? "#3EF2E0" : "rgba(234,240,255,0.2)",
-            }}
-          />
-        ))}
-      </div>
+      <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-widest2 text-mist/30">
+        Hover to pause
+      </p>
     </section>
   );
 }

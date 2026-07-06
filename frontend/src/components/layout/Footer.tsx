@@ -15,7 +15,7 @@ export function Footer() {
   const [status, setStatus] = useState("idle");
   const [feedback, setFeedback] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.includes("@")) return;
 
@@ -112,7 +112,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               {SOCIALS.map((social) => (
                 <li key={social.label}>
-                  
+                  <a
                     href={social.href}
                     target="_blank"
                     rel="noreferrer"
@@ -144,7 +144,7 @@ export function Footer() {
                 disabled={status === "loading"}
                 className="shrink-0 rounded-full bg-signal-gradient px-4 py-2 font-mono text-[11px] uppercase tracking-widest2 text-void-base disabled:opacity-50"
               >
-                {status === "loading" ? "…" : "Join"}
+                {status === "loading" ? "â€¦" : "Join"}
               </button>
             </form>
             <p
@@ -159,7 +159,7 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 pt-8 text-center md:flex-row md:text-left">
           <p className="font-mono text-[11px] text-mist/30">
-            © 2026 TechFest. All rights reserved.
+            Â© 2026 TechFest. All rights reserved.
           </p>
           <p className="font-mono text-[11px] text-mist/30">
             Built by the Organizing Committee, IIT

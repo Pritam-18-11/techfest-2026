@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GALLERY_TILES, type GalleryTile } from "@/lib/galleryData";
 import { useFetchWithFallback } from "@/hooks/useFetchWithFallback";
@@ -34,7 +34,7 @@ export function Gallery() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {tiles.map((tile, i) => (
             <motion.button
-              key={(tile as { _id?: string }).id ?? (tile as { _id?: string })._id ?? `${tile.caption}-${i}`}
+              key={(tile as { id?: string; _id?: string }).id ?? (tile as { id?: string; _id?: string })._id ?? `${tile.caption}-${i}`}
               data-cursor="hover"
               onClick={() => setSelected(tile)}
               initial={{ opacity: 0, y: 24 }}
