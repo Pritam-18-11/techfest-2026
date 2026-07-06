@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const DAYS = [
   {
-    label: "Day 1 · Feb 13",
+    label: "Day 1 · Aug 14",
     theme: "Ignition",
     items: [
       { time: "09:00", title: "Opening Ceremony & Keynote" },
@@ -13,7 +13,7 @@ const DAYS = [
     ],
   },
   {
-    label: "Day 2 · Feb 14",
+    label: "Day 2 · Aug 15",
     theme: "Momentum",
     items: [
       { time: "10:00", title: "RoboWars Qualifiers" },
@@ -23,7 +23,7 @@ const DAYS = [
     ],
   },
   {
-    label: "Day 3 · Feb 15",
+    label: "Day 3 · Aug 16",
     theme: "Finale",
     items: [
       { time: "09:00", title: "Future Mobility Challenge" },

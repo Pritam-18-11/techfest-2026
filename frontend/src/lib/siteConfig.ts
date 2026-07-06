@@ -1,10 +1,10 @@
 export const SITE = {
   name: "TechFest 2026",
   tagline: "The Future Begins Here",
-  dates: "13–15 February 2026",
+  dates: "14–16 August 2026",
   venue: "Indian Institute of Technology",
-  registrationOpensISO: "2025-11-01T00:00:00+05:30",
-  eventStartISO: "2026-02-13T09:00:00+05:30",
+  registrationOpensISO: "2026-06-01T00:00:00+05:30",
+  eventStartISO: "2026-08-14T09:00:00+05:30",
 };
 
 export type NavItem = {
